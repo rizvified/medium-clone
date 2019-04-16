@@ -1,28 +1,34 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Header from './components/Header';
+import { Switch, Route } from 'react-router-dom'
+
+import Feed from './components/Feed'
+import Profile from './components/Profile'
+import ArticleView from './components/ArticleView'
+import Editor from './components/Editor'
+import requireAuthentication from './utils/requireAuth'
+import SignInWith from './components/SignInWith'
+//import  from './components'
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+    render() {
+        const pathname = window.location.pathname
+        return ( 
+            <div>
+            { !pathname.includes('editor') ? <Header /> : '' }
+            <SignInWith />
+                <Switch>
+                
+                    <Route exact path="/" component={Feed} />
+
+                    <Route path="/profile/:id" component={Profile} />
+                    <Route path="/articleview/:id" component={ArticleView} />
+                    <Route path="/editor" component={requireAuthentication(Editor)} />
+                    <Route path="**" component={Feed} />
+                </Switch>
+            </div>
+        );
+    }
 }
 
 export default App;
